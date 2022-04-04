@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import {ConfigModule} from '@nestjs/config'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 require('dotenv').config();
 
@@ -14,9 +15,10 @@ require('dotenv').config();
       type:'postgres',
       synchronize:true,
       autoLoadEntities:true,
-      url: ''
+      url: 'postgres://vfrisdgx:bPljy1eQJNbNYmhokjnbOhPBKgRFgwjn@satao.db.elephantsql.com/vfrisdgx'
     }),
-    UserModule
+    UserModule,
+    AuthModule
   
   ],
   controllers: [AppController],
