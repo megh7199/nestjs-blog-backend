@@ -99,14 +99,18 @@ export class UserServiceService {
     }
 
     validateUser(email: string, password: string): Observable<User> {
-        return from(this.userRepository.findOne({email})).pipe(
+        return from(this.userRepository.findOne({email})).pipe(map((user:User) => {
+            if(user)
+            return user;
+            else
+            throw new UnauthorizedException("wrong username")}),
             switchMap((user: User) => this.authService.comparePasswords(password, user.password).pipe(
                 map((match: boolean) => {
                     if(match) {
                         const {password, ...result} = user;
                         return result;
                     } else {
-                        throw Error;
+                        throw new UnauthorizedException("wrong password");
                     }
                 })
             ))
