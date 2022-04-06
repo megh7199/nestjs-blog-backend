@@ -1,4 +1,5 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryColumnCannotBeNullableError, PrimaryGeneratedColumn } from "typeorm";
+import { userRoles } from "./user.interface";
 
 @Entity()
 export class userEntity{
@@ -16,6 +17,9 @@ export class userEntity{
 
     @Column({nullable:true})
     password:string;
+
+    @Column({type:'enum',enum:userRoles,default:'user'})
+    role:userRoles
 
     @BeforeInsert()
     emailToLower(){

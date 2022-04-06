@@ -15,7 +15,8 @@ require('dotenv').config();
       type:'postgres',
       synchronize:true,
       autoLoadEntities:true,
-      url: 'postgres://vfrisdgx:bPljy1eQJNbNYmhokjnbOhPBKgRFgwjn@satao.db.elephantsql.com/vfrisdgx'
+      url: process.env.DATABASE_URL
+      //'postgres://vfrisdgx:bPljy1eQJNbNYmhokjnbOhPBKgRFgwjn@satao.db.elephantsql.com/vfrisdgx'
     }),
     UserModule,
     AuthModule

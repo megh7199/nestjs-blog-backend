@@ -24,6 +24,7 @@ export class UserServiceService {
                 newUser.username = user.username;
                 newUser.email = user.email;
                 newUser.password = passwordHash;
+                newUser.role = user.role;
                // newUser.role = UserRole.USER;
 
                 return from(this.userRepository.save(newUser)).pipe(
@@ -49,6 +50,9 @@ export class UserServiceService {
         return from(this.userRepository.update(id,user));
     }
 
+    updateUserRole(id:number,user:User):Observable<any>{
+        return from(this.userRepository.update(id,user));
+    }
     // delete(id:number): Observable<any>{
     //     return from(this.userRepository.delete(id));
     // }
