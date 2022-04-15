@@ -13,3 +13,7 @@ export enum userRoles{
     EDITOR = 'editor',
     CHIEF_EDITOR = 'chief editor'
 }
+
+export class SampleDto{
+    name?:string;
+}
