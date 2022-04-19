@@ -5,6 +5,8 @@ import {ConfigModule} from '@nestjs/config'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { DataModule } from './data/data.module';
 
 require('dotenv').config();
 
@@ -19,8 +21,13 @@ require('dotenv').config();
       //'postgres://vfrisdgx:bPljy1eQJNbNYmhokjnbOhPBKgRFgwjn@satao.db.elephantsql.com/vfrisdgx'
     }),
     UserModule,
-    AuthModule
-  
+    AuthModule,
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        dest: './upload',
+      }),
+    }),
+    DataModule
   ],
   controllers: [AppController],
   providers: [AppService],

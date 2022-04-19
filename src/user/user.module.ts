@@ -5,13 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { userEntity } from './models/user.entity';
 import { AppModule } from 'src/app.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { DataModule } from 'src/data/data.module';
+import DataService from 'src/data/service/data.service';
+import DatabaseFile from 'src/data/models/databaseFile.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([userEntity]),
-    AuthModule
+    TypeOrmModule.forFeature([DatabaseFile]),
+    AuthModule,
+    DataModule
   ],
-  providers: [UserServiceService],
+  providers: [UserServiceService,DataService],
   controllers: [UserControllerController],
   exports:[UserServiceService]
 })
