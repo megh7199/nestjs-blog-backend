@@ -11,7 +11,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { diskStorage } from 'multer';
-
+const fs = require('fs')
+var nxlsx = require('node-xlsx');
 var XLSX = require("xlsx");
 
 export const storage = {
@@ -97,7 +98,36 @@ export class UserControllerController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', storage))
     uploadFile(@UploadedFile() file): any {
-        return { "data":file.buffer,"name":file.originalname};
+        //let data = fs.createReadStream(file.path,'utf8');
+        
+        // const data = fs.readFileSync(file.path);
+        // console.log(data);
+        
+        // fs.readFile(file.path, function(err,data){
+        //     if (!err) {
+        //         console.log('received data: ' + data);
+        //     } else {
+        //         console.log(err);
+        //     }
+        // });
+        
+        var data = nxlsx.parse(file.path);
+        var d0=data[0];
+        console.log(d0);
+        // for(var d=0;d<d0.data.length; d++){
+        //     console.log(d0.data[d][0]);
+        // }
+
+        //data.toString('utf8');
+        
+        //console.log(data['Sheets']['Sheet1']['!ref']);
+        // console.log(range['e']['r']);
+        
+        //return this.userService.uploadFile(file.originalname,data);
+
+        // const data = XLSX.readFile(file.path)
+        // const range = XLSX.utils.decode_range(data['Sheets']['Sheet1']['!ref']);
+        // console.log(data['SheetNames']);
     }
 
 }

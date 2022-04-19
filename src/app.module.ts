@@ -6,6 +6,7 @@ import {TypeOrmModule} from '@nestjs/typeorm'
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { DataModule } from './data/data.module';
 
 require('dotenv').config();
 
@@ -25,7 +26,8 @@ require('dotenv').config();
       useFactory: () => ({
         dest: './upload',
       }),
-    })
+    }),
+    DataModule
   ],
   controllers: [AppController],
   providers: [AppService],

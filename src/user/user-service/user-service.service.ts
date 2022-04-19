@@ -6,13 +6,15 @@ import { Repository } from 'typeorm';
 import { userEntity } from '../models/user.entity';
 import { User } from '../models/user.interface';
 import { switchMap, map, catchError } from 'rxjs/operators';
+import DataService from 'src/data/service/data.service';
 
 @Injectable()
 export class UserServiceService {
 
     constructor(
         @InjectRepository(userEntity) private readonly userRepository: Repository<userEntity>,
-        private authService:AuthService
+        private authService:AuthService,
+        private readonly dataService: DataService
     ){}
 
     create(user:User):Observable<User>{
@@ -125,5 +127,8 @@ export class UserServiceService {
     findByMail(email: string): Observable<User> {
         return from(this.userRepository.findOne({email}));
     }
- 
+    
+    uploadFile(filename:string,buffer:any){
+        return this.dataService.uploadDatabaseFile(filename,buffer);
+    }
 }
