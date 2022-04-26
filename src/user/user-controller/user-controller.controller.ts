@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { get } from 'http';
 import { Observable, of } from 'rxjs';
 import { SampleDto, User, userRoles } from '../models/user.interface';
@@ -13,7 +13,7 @@ import { Express } from 'express';
 import { diskStorage } from 'multer';
 const fs = require('fs')
 var nxlsx = require('node-xlsx');
-var XLSX = require("xlsx");
+// var XLSX = require("xlsx");
 
 export const storage = {
     storage: diskStorage({
@@ -33,6 +33,21 @@ export class UserControllerController {
 
     constructor(private userService: UserServiceService){}
 
+
+    @Post('mail')
+    async sendEmail(@Query('email') email) {
+    const mail = {
+      to: email,
+      subject: 'Hello from sendgrid',
+      from: 'meghshah7199@gmail.com', // Fill it with your validated email on SendGrid account
+      text: 'Hello',
+      html: '<h1>Hello</h1>',
+    };
+
+    return await this.userService.send(mail);
+  }
+
+  
     // @Post()
     // create(@Body() user:User): Observable<User>{
     //     return this.userService.create(user);
@@ -98,6 +113,34 @@ export class UserControllerController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', storage))
     uploadFile(@UploadedFile() file): any {
+        var data = nxlsx.parse(file.path);
+        var d0=data[0].data; //access sheet1
+        var header = d0[0];
+        d0.shift();
+        var res = d0.map((d)=>{
+            var json = {};
+            for(var i=0;i<d.length;i++)
+            {
+                json[header[i]]=d[i];
+            }
+            return json;
+            
+        });
+        console.log(res);
+        // var res = [];
+        // for(var i=1;i<d0.data.length;i++)
+        // {
+        //     var row = {};
+        //     for(var j=0;j<d0.data[0].length;j++)
+        //     {
+                
+        //         row[d0.data[0][j]] = d0.data[i][j];
+        //     }
+        //     res.push(row);
+        // }
+       
+        //console.log(res);
+            
         //let data = fs.createReadStream(file.path,'utf8');
         
         // const data = fs.readFileSync(file.path);
@@ -111,9 +154,7 @@ export class UserControllerController {
         //     }
         // });
         
-        var data = nxlsx.parse(file.path);
-        var d0=data[0];
-        console.log(d0);
+        
         // for(var d=0;d<d0.data.length; d++){
         //     console.log(d0.data[d][0]);
         // }
@@ -129,5 +170,7 @@ export class UserControllerController {
         // const range = XLSX.utils.decode_range(data['Sheets']['Sheet1']['!ref']);
         // console.log(data['SheetNames']);
     }
+
+
 
 }

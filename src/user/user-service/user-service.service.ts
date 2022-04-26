@@ -7,6 +7,8 @@ import { userEntity } from '../models/user.entity';
 import { User } from '../models/user.interface';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import DataService from 'src/data/service/data.service';
+import { ConfigService } from '@nestjs/config';
+import * as SendGrid from '@sendgrid/mail';
 
 @Injectable()
 export class UserServiceService {
@@ -14,8 +16,18 @@ export class UserServiceService {
     constructor(
         @InjectRepository(userEntity) private readonly userRepository: Repository<userEntity>,
         private authService:AuthService,
-        private readonly dataService: DataService
-    ){}
+        private readonly dataService: DataService,
+        private readonly configService: ConfigService
+    ){
+        SendGrid.setApiKey(this.configService.get<string>('SEND_GRID_KEY'));
+    }
+
+    async send(mail: SendGrid.MailDataRequired) {
+        const transport = await SendGrid.send(mail);
+        // avoid this on production. use log instead :)
+        console.log(`E-Mail sent to ${mail.to}`);
+        return transport;
+      }
 
     create(user:User):Observable<User>{
         //return from(this.userRepository.save(user));
