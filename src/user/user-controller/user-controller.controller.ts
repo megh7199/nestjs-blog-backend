@@ -41,7 +41,7 @@ export class UserControllerController {
       subject: 'Hello from sendgrid',
       from: 'meghshah7199@gmail.com', // Fill it with your validated email on SendGrid account
       text: 'Hello',
-      html: '<h1>Hello</h1>',
+      //html: '<h1>Hello</h1>',
     };
 
     return await this.userService.send(mail);
